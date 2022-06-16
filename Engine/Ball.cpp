@@ -11,23 +11,23 @@ bool Ball::DoWallCollision(const RectF& walls)
     bool collided = false;
 
     if (rect.left < walls.left) {
-        pos.x = walls.left - rect.left;
+        pos.x += walls.left - rect.left;
         ReboundX();
         collided = true;
     }
     else if (rect.right > walls.right) {
-        pos.x = rect.right - walls.right;
+        pos.x -= rect.right - walls.right;
         ReboundX();
         collided = true;
     }
     
     if (rect.top < walls.top) {
-        pos.y = walls.top - rect.top;
+        pos.y += walls.top - rect.top;
         ReboundY();
         collided = true;
     }
     else if (rect.bottom > walls.bottom) {
-        pos.y = rect.bottom - walls.bottom;
+        pos.y -= rect.bottom - walls.bottom;
         ReboundY();
         collided = true;
     }
@@ -53,4 +53,9 @@ RectF Ball::GetRect() const
 void Ball::DrawBall(Graphics& gfx) const
 {
     SpriteCodex::DrawBall(pos, gfx);
+}
+
+void Ball::Update(float dt)
+{
+    pos += vel * dt;
 }
