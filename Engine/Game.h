@@ -24,6 +24,7 @@
 #include "Mouse.h"
 #include "Graphics.h"
 #include "Brick.h"
+#include "Ball.h"
 
 
 class Game
@@ -45,5 +46,6 @@ private:
 	/********************************/
 	/*  User Variables              */
 	Brick brick;
+	Ball ball;
 	/********************************/
 };
