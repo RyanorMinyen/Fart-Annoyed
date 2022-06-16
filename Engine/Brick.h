@@ -15,6 +15,7 @@ public:
 	
 private:
 	
+	static constexpr float padding = 1.0f;
 	bool destroyed = false;
 	RectF rect;
 	Color color;
