@@ -25,3 +25,14 @@ bool RectF::IsOverLappingWith(const RectF& other) const
     return left < other.right && right > other.left &&
         top < other.bottom && bottom > other.top;
 }
+
+RectF RectF::FromCenter(const Vec2& center, float halfWidth, float halfHeight)
+{
+    Vec2 x = { halfWidth, halfHeight };
+    return RectF(Vec2(center - x), Vec2(center + x));
+}
+
+RectF RectF::GetExpanded(float offset) const
+{
+    return RectF(left+offset, right-offset, top+offset, bottom-offset);
+}
