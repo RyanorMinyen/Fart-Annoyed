@@ -64,3 +64,4 @@ Vec2 Ball::GetVelocity() const
 {
     return vel;
 }
+

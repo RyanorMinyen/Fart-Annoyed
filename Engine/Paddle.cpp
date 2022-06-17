@@ -1,4 +1,5 @@
 #include "Paddle.h"
+#include <cmath>
 
 Paddle::Paddle(const Vec2& pos_in, float halfWidth_in, float halfHeight_in):
 	pos(pos_in),halfWidth(halfWidth_in),halfHeight(halfHeight_in)
@@ -17,17 +18,40 @@ void Paddle::Draw(Graphics& gfx) const
 
 }
 
-bool Paddle::DoBallCollison(Ball& ball) const
+bool Paddle::DoBallCollison(Ball& ball) 
 {
-	const RectF rect = GetRect();
+	if (!isCooldown) {
 
-	if (ball.GetVelocity().y > 0.0f && rect.IsOverLappingWith(ball.GetRect())) {
 
-		ball.ReboundY();
-		return true;
+		const RectF rect = GetRect();
+		RectF ballRect = ball.GetRect();
+
+		if (rect.IsOverLappingWith(ball.GetRect())) {
+
+			if (std::signbit(ball.GetVelocity().x) == std::signbit((ball.GetRect().GetCenter().x) - (rect.GetCenter().x))) {
+				ball.ReboundY();
+
+			}
+			else if (ballRect.GetCenter().x > rect.left && ballRect.GetCenter().x < rect.right) {
+
+				ball.ReboundY();
+
+			}
+			else {
+				ball.ReboundX();
+
+			}
+			isCooldown = true;
+			return true;
+			
+		}
+
+		
+
 	}
-
 	return false;
+	
+
 }
 
 void Paddle::DoWallCollison(const RectF& walls)
@@ -60,4 +84,9 @@ void Paddle::Update(float dt, Keyboard& kbd)
 RectF Paddle::GetRect() const
 {
 	return RectF::FromCenter(pos,halfWidth,halfHeight);
+}
+
+void Paddle::resetCooldown()
+{
+	isCooldown = false;
 }

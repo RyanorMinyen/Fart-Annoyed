@@ -50,34 +50,65 @@ Game::Game( MainWindow& wnd )
 void Game::Go()
 {
 	gfx.BeginFrame();	
-	UpdateModel();
+	float elapsedTime = ft.Mark();
+	while (elapsedTime > 0.0f) {
+		const float dt = std::min(0.0025f, elapsedTime);
+		UpdateModel(dt);
+		elapsedTime -= dt;
+	}
 	ComposeFrame();
 	gfx.EndFrame();
 }
 
-void Game::UpdateModel()
+void Game::UpdateModel(float dt)
 {
-	const float dt = ft.Mark();
+	
 	ball.Update(dt);
 	pad.Update(dt, wnd.kbd);
 	pad.DoWallCollison(walls);
 	
-	for (auto& brick : bricks) {
+	bool collisionHappened = false;
+	float currColDistSq;
+	int currColIndex;
+
+	for (int i = 0; i < nBricks; i++) {
 		
-		if (brick.DoBallCollision(ball)) {
-			soundBrick.Play();
-			break;
-		}
-		
+		if (bricks[i].CheckBallCollision(ball)) {
+
+			const float newColDistSq = (ball.GetRect().GetCenter() - bricks[i].GetCenter()).GetLengthSq();
+
+			if (collisionHappened) {
+				
+				if (newColDistSq < currColDistSq) {
+					currColDistSq = newColDistSq;
+					currColIndex = i;
+				}
+				
+			}
+			else {
+				collisionHappened = true;
+				currColDistSq = newColDistSq;
+				currColIndex = i;
+			}
+		}	
 	}
 
+	if (collisionHappened) {
+		
+		pad.resetCooldown();
+		bricks[currColIndex].ExecuteBallCollision(ball);
+		soundBrick.Play();
+	}
 	
 	
 	if (pad.DoBallCollison(ball)) {
+		
 		soundPad.Play();
 	}
 	if (ball.DoWallCollision(walls)) {
+		pad.resetCooldown();
 		soundPad.Play();
+		
 	}
 	
 

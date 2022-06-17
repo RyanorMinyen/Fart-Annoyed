@@ -10,15 +10,17 @@ class Paddle {
 public:
 	Paddle(const Vec2& pos, float halfWidth_in, float halfHeight_in);
 	void Draw(Graphics& gfx) const;
-	bool DoBallCollison(Ball& ball) const;
+	bool DoBallCollison(Ball& ball);
 	void DoWallCollison(const RectF& walls);
 	void Update(float dt, Keyboard& kbd);
 	RectF GetRect() const;
+	void resetCooldown();
 
 
 private:
 
 	Color color = Colors::White;
+	bool isCooldown = false;
 	static constexpr float wingWidth = 18.0f;
 	Color wingColor = Colors::Red;
 	Vec2 pos;

@@ -13,6 +13,7 @@ public:
 	void DrawBall(Graphics& gfx)const;
 	void Update(float dt);
 	Vec2 GetVelocity() const;
+
 private:
 	
 	static constexpr float radius = 7.0f;
