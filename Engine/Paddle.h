@@ -15,7 +15,7 @@ public:
 	void Update(float dt, Keyboard& kbd);
 	RectF GetRect() const;
 	void resetCooldown();
-
+	void ResetPos();
 
 private:
 

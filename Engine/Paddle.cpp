@@ -90,3 +90,8 @@ void Paddle::resetCooldown()
 {
 	isCooldown = false;
 }
+
+void Paddle::ResetPos()
+{
+	pos = { 400.0f,500.0f };
+}

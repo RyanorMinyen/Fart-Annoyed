@@ -65,3 +65,9 @@ Vec2 Ball::GetVelocity() const
     return vel;
 }
 
+void Ball::ResetPos()
+{
+ 
+    pos = { 400.0f, 483.0f };
+}
+

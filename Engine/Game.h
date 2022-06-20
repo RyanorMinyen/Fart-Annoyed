@@ -61,6 +61,9 @@ private:
 	Sound soundBrick;
 	Paddle pad;
 	bool Gameover = false;
+	bool isStarted = false;
+	bool playerReady = false;
+	int lives = 3;
 
 	/********************************/
 };
