@@ -26,14 +26,14 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd ),
 	ball(Vec2(200.0f,200.0f),Vec2(200.0f,200.0f)),
-	walls(RectF(Vec2(0.0f,0.0f),Vec2(Graphics::ScreenWidth, Graphics::ScreenHeight))),
+	walls(RectF(Vec2(170.0f,0.0f),Vec2(630.0f, Graphics::ScreenHeight))),
 	soundPad(L"Sounds\\arkpad.wav"),
 	soundBrick(L"Sounds\\arkbrick.wav"),
-	pad(Vec2(400.0f,500.0f), 50.0f, 15.0f)
+	pad(Vec2(400.0f,500.0f), 40.0f, 10.0f)
 {
-	const Vec2 topLeft = { 40.0f, 40.0f };
+	const Vec2 topLeft = { 205.0f, 60.0f };
 
-	const Color colors[5] = { Colors::Red, Colors::Blue, Colors::Magenta, Colors::Yellow, Colors::Green };
+	const Color colors[5] = { Colors::Red, Colors::Blue, Colors::Magenta, Colors::Green, Colors::Yellow };
 
 	int i = 0;
 	for (int y = 0; y < nBricksDown; y++) {
@@ -124,6 +124,9 @@ void Game::UpdateModel(float dt)
 void Game::ComposeFrame()
 {
 	if (!Gameover) {
+		
+		RectF::DrawBackdrop(gfx);
+		RectF::DrawBoarder(gfx);
 		for (const auto& brick : bricks) {
 			brick.Draw(gfx);
 		}

@@ -13,10 +13,13 @@ public:
 	static RectF FromCenter(const Vec2& center, float halfWidth, float halfHeight);
 	RectF GetExpanded(float offset) const;
 	Vec2 GetCenter() const;
+	static void DrawBoarder(class Graphics& gfx);
+	static void DrawBackdrop(class Graphics& gfx);
 
 
 
 public:
+	static constexpr float boarderThickness = 5.0f;
 	float left;
 	float right;
 	float top;

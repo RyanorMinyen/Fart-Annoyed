@@ -1,4 +1,5 @@
 #include "RectF.h"
+#include "Graphics.h"
 
 RectF::RectF(float left_in, float right_in, float top_in, float bottom_in):
     left(left_in),
@@ -40,4 +41,23 @@ RectF RectF::GetExpanded(float offset) const
 Vec2 RectF::GetCenter() const
 {
     return Vec2((left + right) / 2.0f, (top + bottom)/ 2.0f);
+}
+
+void RectF::DrawBoarder(class Graphics& gfx)
+{
+   // DrawRect(int(rect.left), int(rect.top), int(rect.right), int(rect.bottom), c);
+    // top
+    gfx.DrawRect(int(170.0f - boarderThickness), int(0.0f), int(630.0f),int(boarderThickness), Colors::Blue);
+    // bottom
+    gfx.DrawRect(int(170.0f - boarderThickness), int(595.0f), int(630.0f), int(600.0f), Colors::Blue);
+    //left
+    gfx.DrawRect(int(170.0f - boarderThickness), int(0.0f), int(170.0f), int(600.0f), Colors::Blue);
+    //right
+    gfx.DrawRect(int(630.0f), int(0.0f), int(630.0f+boarderThickness), int(600.0f), Colors::Blue);
+  
+}
+
+void RectF::DrawBackdrop(Graphics& gfx)
+{
+    gfx.DrawRect(int(175.0f - boarderThickness), int(0.0f),int( 630.0f), int(600.0f), Colors::Gray);
 }
