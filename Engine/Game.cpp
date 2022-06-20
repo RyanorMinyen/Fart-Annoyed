@@ -25,7 +25,7 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	ball(Vec2(300.0f,300.0f),Vec2(300.0f,300.0f)),
+	ball(Vec2(200.0f,200.0f),Vec2(200.0f,200.0f)),
 	walls(RectF(Vec2(0.0f,0.0f),Vec2(Graphics::ScreenWidth, Graphics::ScreenHeight))),
 	soundPad(L"Sounds\\arkpad.wav"),
 	soundBrick(L"Sounds\\arkbrick.wav"),
@@ -63,63 +63,75 @@ void Game::Go()
 void Game::UpdateModel(float dt)
 {
 	
-	ball.Update(dt);
-	pad.Update(dt, wnd.kbd);
-	pad.DoWallCollison(walls);
-	
-	bool collisionHappened = false;
-	float currColDistSq;
-	int currColIndex;
+	if (!Gameover) {
+		ball.Update(dt);
+		pad.Update(dt, wnd.kbd);
+		pad.DoWallCollison(walls);
 
-	for (int i = 0; i < nBricks; i++) {
-		
-		if (bricks[i].CheckBallCollision(ball)) {
+		bool collisionHappened = false;
+		float currColDistSq;
+		int currColIndex;
 
-			const float newColDistSq = (ball.GetRect().GetCenter() - bricks[i].GetCenter()).GetLengthSq();
+		for (int i = 0; i < nBricks; i++) {
 
-			if (collisionHappened) {
-				
-				if (newColDistSq < currColDistSq) {
+			if (bricks[i].CheckBallCollision(ball)) {
+
+				const float newColDistSq = (ball.GetRect().GetCenter() - bricks[i].GetCenter()).GetLengthSq();
+
+				if (collisionHappened) {
+
+					if (newColDistSq < currColDistSq) {
+						currColDistSq = newColDistSq;
+						currColIndex = i;
+					}
+
+				}
+				else {
+					collisionHappened = true;
 					currColDistSq = newColDistSq;
 					currColIndex = i;
 				}
-				
 			}
-			else {
-				collisionHappened = true;
-				currColDistSq = newColDistSq;
-				currColIndex = i;
-			}
-		}	
-	}
+		}
 
-	if (collisionHappened) {
-		
-		pad.resetCooldown();
-		bricks[currColIndex].ExecuteBallCollision(ball);
-		soundBrick.Play();
-	}
-	
-	
-	if (pad.DoBallCollison(ball)) {
-		
-		soundPad.Play();
-	}
-	if (ball.DoWallCollision(walls)) {
-		pad.resetCooldown();
-		soundPad.Play();
-		
-	}
-	
+		if (collisionHappened) {
 
+			pad.resetCooldown();
+			bricks[currColIndex].ExecuteBallCollision(ball);
+			soundBrick.Play();
+		}
+
+
+		if (pad.DoBallCollison(ball)) {
+
+			soundPad.Play();
+		}
+		if (ball.DoWallCollision(walls)) {
+			pad.resetCooldown();
+			soundPad.Play();
+
+		}
+
+		// walls(RectF(Vec2(0.0f, 0.0f), Vec2(Graphics::ScreenWidth, Graphics::ScreenHeight)))
+		if (ball.GetRect().bottom >= walls.bottom) {
+			Gameover = true;
+		}
+	}
+	
 
 }
 
 void Game::ComposeFrame()
 {
-	for (const auto& brick : bricks) {
-		brick.Draw(gfx);
+	if (!Gameover) {
+		for (const auto& brick : bricks) {
+			brick.Draw(gfx);
+		}
+		ball.DrawBall(gfx);
+		pad.Draw(gfx);
 	}
-	ball.DrawBall(gfx);
-	pad.Draw(gfx);
+	else {
+		SpriteCodex::DrawGameOver({ 400,300 }, gfx);
+	}
+	
 }

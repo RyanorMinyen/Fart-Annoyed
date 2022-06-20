@@ -60,6 +60,7 @@ private:
 	Sound soundPad;
 	Sound soundBrick;
 	Paddle pad;
+	bool Gameover = false;
 
 	/********************************/
 };
